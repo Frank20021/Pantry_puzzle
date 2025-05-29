@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Puzzle - Reduce Food Waste</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Pantry Puzzle</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#recipes">Recipes</a></li>
+                <li><a href="#savings">Savings</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#saved-recipes" id="saved-recipes-link">Saved Recipes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h2>Turn Leftovers into Delicious Meals</h2>
+                <p>Save money and reduce food waste by up to 25%</p>
+                <div class="search-container">
+                    <div class="search-wrapper">
+                        <input type="text" id="ingredient-search" placeholder="Enter your ingredients...">
+                        <div id="autocomplete-results" class="autocomplete-dropdown"></div>
+                    </div>
+                    <button id="search-btn">Find Recipes</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <div class="feature-card">
+                <i class="fas fa-utensils"></i>
+                <h3>Smart Recipe Finder</h3>
+                <p>Get recipe suggestions based on ingredients you already have</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-piggy-bank"></i>
+                <h3>Save Money</h3>
+                <p>Save up to $370 per person annually</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-leaf"></i>
+                <h3>Reduce Waste</h3>
+                <p>Help the environment by reducing food waste</p>
+            </div>
+        </section>
+
+        <section id="recipe-results">
+            <h2>Recipe Suggestions</h2>
+            <div class="recipe-grid" id="recipe-container">
+                <!-- Recipe cards will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- New Saved Recipes Section -->
+        <section id="saved-recipes" class="saved-recipes-section" style="display: none;">
+            <h2>Saved Recipes</h2>
+            <div class="recipe-grid" id="saved-recipes-container">
+                <!-- Saved recipe cards will be dynamically added here -->
+            </div>
+        </section>
+
+        <section id="about" class="about-section modal">
+            <div class="about-container">
+                <button class="about-close" id="about-close" aria-label="Close About">&times;</button>
+                <h2>About Pantry Puzzle</h2>
+                
+                <div class="about-content">
+                    <div class="about-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>The Problem</h3>
+                        <p>Food waste is a global crisis affecting our environment and economy:</p>
+                        <ul>
+                            <li>1.3 billion tons of food is wasted annually worldwide</li>
+                            <li>40% of food in the US goes uneaten</li>
+                            <li>Average household wastes $1,500 worth of food each year</li>
+                            <li>Food waste contributes to 8% of global greenhouse gas emissions</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-card">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>Our Mission</h3>
+                        <p>Pantry Puzzle aims to transform how we use leftover ingredients by:</p>
+                        <ul>
+                            <li>Helping users create delicious meals from available ingredients</li>
+                            <li>Reducing food waste through smart recipe suggestions</li>
+                            <li>Making sustainable cooking accessible and enjoyable</li>
+                            <li>Empowering users to make the most of their pantry</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-card">
+                        <i class="fas fa-star"></i>
+                        <h3>Key Benefits</h3>
+                        <ul>
+                            <li><strong>Save Money:</strong> Reduce grocery bills by using ingredients you already have</li>
+                            <li><strong>Reduce Waste:</strong> Minimize food waste and its environmental impact</li>
+                            <li><strong>Discover Recipes:</strong> Get creative with AI-generated recipe suggestions</li>
+                            <li><strong>Learn Cooking:</strong> Improve cooking skills with detailed instructions</li>
+                            <li><strong>Plan Better:</strong> Make informed decisions about food purchases</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Impact</h3>
+                        <p>Our users have achieved remarkable results:</p>
+                        <ul>
+                            <li>25% reduction in food waste</li>
+                            <li>$370 average annual savings per person</li>
+                            <li>90% of users report improved cooking confidence</li>
+                            <li>85% reduction in expired food items</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="about-cta">
+                    <h3>Join the Movement</h3>
+                    <p>Start reducing food waste today and discover the joy of creative cooking!</p>
+                    <a href="#hero" class="cta-button">Get Started</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Pantry Puzzle</h3>
+                <p>Making sustainable cooking easy and fun</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#recipes">Recipes</a></li>
+                    <li><a href="#savings">Savings</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Pantry Puzzle. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
