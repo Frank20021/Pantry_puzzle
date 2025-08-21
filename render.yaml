@@ -1,7 +1,6 @@
-services:
-  - type: static
-    name: FRANK
-    staticPublishPath: .
+staticSites:
+  - name: FRANK
+    publishPath: .
     pullRequestPreviewsEnabled: true
     headers:
       - path: /*
