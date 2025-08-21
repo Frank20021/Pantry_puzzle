@@ -54,11 +54,13 @@ nav {
 
 /* Hero Section */
 #hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+                url('https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
-    background-position: center;
-    height: 80vh;
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: calc(100vh - 60px);
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

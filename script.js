@@ -160,6 +160,45 @@ const recipeDatabase = [
     }
 ];
 
+// Choose a representative image based on ingredients and optional style
+function getImageForIngredients(ingredients, styleHint) {
+    const keywords = (ingredients || []).map(i => i.toLowerCase());
+    const has = (word) => keywords.some(k => k.includes(word));
+
+    // Style-specific hints
+    if (styleHint) {
+        const style = styleHint.toLowerCase();
+        if (style.includes('stir') || style.includes('fry')) {
+            if (has('chicken')) return 'https://images.unsplash.com/photo-1604908176997-431d3f07f9a3?auto=format&fit=crop&w=1200&q=80';
+            if (has('beef')) return 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=1200&q=80';
+            return 'https://images.unsplash.com/photo-1625944527811-4a4c108f662a?auto=format&fit=crop&w=1200&q=80';
+        }
+        if (style.includes('bake') || style.includes('casserole')) {
+            if (has('pasta')) return 'https://images.unsplash.com/photo-1520207607210-3a2eeca9b487?auto=format&fit=crop&w=1200&q=80';
+            if (has('potato')) return 'https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=1200&q=80';
+            return 'https://images.unsplash.com/photo-1514511542834-d046bda03d68?auto=format&fit=crop&w=1200&q=80';
+        }
+        if (style.includes('soup') || style.includes('simmer')) {
+            if (has('tomato')) return 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200&q=80';
+            if (has('chicken')) return 'https://images.unsplash.com/photo-1514986888952-8cd320577b68?auto=format&fit=crop&w=1200&q=80';
+            return 'https://images.unsplash.com/photo-1542444257-7b3b9b4d3c48?auto=format&fit=crop&w=1200&q=80';
+        }
+    }
+
+    // Ingredient-based defaults
+    if (has('plantain') || has('yam')) return 'https://images.unsplash.com/photo-1592899677977-9c10ca588bb4?auto=format&fit=crop&w=1200&q=80';
+    if (has('rice') && has('beans')) return 'https://images.unsplash.com/photo-1617093727343-37440fce4608?auto=format&fit=crop&w=1200&q=80';
+    if (has('rice')) return 'https://images.unsplash.com/photo-1546549039-5fd3a4f8eed5?auto=format&fit=crop&w=1200&q=80';
+    if (has('pasta')) return 'https://images.unsplash.com/photo-1521389508051-d7ffb5dc8bbf?auto=format&fit=crop&w=1200&q=80';
+    if (has('egg')) return 'https://images.unsplash.com/photo-1514986888952-8cd320577b68?auto=format&fit=crop&w=1200&q=80';
+    if (has('chicken')) return 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=1200&q=80';
+    if (has('soup')) return 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200&q=80';
+    if (has('vegetable') || has('broccoli') || has('carrot')) return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80';
+
+    // Generic fallback
+    return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80';
+}
+
 // DOM Elements
 const searchInput = document.getElementById('ingredient-search');
 const searchButton = document.getElementById('search-btn');
@@ -273,7 +312,7 @@ Tips for Success:
 - Have all ingredients ready before starting
 - Cut ingredients uniformly for even cooking
 - Taste and adjust seasoning as you go`,
-        image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+        image: getImageForIngredients(ingredients, method1)
     });
 
     // Recipe 2: Baked style
@@ -372,7 +411,7 @@ Tips for Success:
 - Don't overfill the baking dish
 - Check for doneness with a knife
 - Let it cool slightly before serving`,
-        image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+        image: getImageForIngredients(ingredients, method2)
     });
 
     // Recipe 3: Soup style
@@ -480,7 +519,7 @@ Additional Notes:
 - Adjust consistency with more broth
 - Add cream or coconut milk for richness
 - Consider adding pasta or rice for heartiness`,
-        image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+        image: getImageForIngredients(ingredients, method3)
     });
 
     return recipes;
@@ -772,8 +811,16 @@ function showAutocomplete(query) {
         return;
     }
 
+    // Collect suggestions from recipe database ingredients
+    const dbIngredients = getUniqueIngredients();
+    const queryLower = query.toLowerCase();
+    const dbMatches = dbIngredients.filter(i => i.includes(queryLower));
+
     // Get AI-generated suggestions
-    const suggestions = generateAISuggestions(query);
+    const aiSuggestions = generateAISuggestions(query);
+
+    // Merge and de-duplicate, prioritize db matches first
+    const suggestions = Array.from(new Set([...dbMatches, ...aiSuggestions])).slice(0, 10);
 
     if (suggestions.length > 0) {
         autocompleteResults.innerHTML = suggestions
@@ -794,11 +841,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('search-btn');
     const autocompleteResults = document.getElementById('autocomplete-results');
 
-    // Add input event listener for autocomplete
+    // Add input event listener for autocomplete (use the last comma-separated token)
     searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.trim();
-        if (query.length > 0) {
-            showAutocomplete(query);
+        const full = e.target.value;
+        const lastToken = full.split(',').pop().trim();
+        if (lastToken.length > 0) {
+            showAutocomplete(lastToken);
         } else {
             autocompleteResults.classList.remove('active');
         }
@@ -809,15 +857,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = e.target.closest('.autocomplete-item');
         if (item) {
             const ingredient = item.dataset.ingredient;
-            const currentValue = searchInput.value.trim();
-            
-            // If there's already text in the input, add the new ingredient with a comma
-            if (currentValue) {
-                searchInput.value = `${currentValue}, ${ingredient}`;
-            } else {
-                searchInput.value = ingredient;
-            }
-            
+            const currentValue = searchInput.value;
+            const parts = currentValue.split(',');
+            parts[parts.length - 1] = ` ${ingredient}`; // replace last token
+            const next = parts.join(',').replace(/^\s*,\s*/,'').replace(/,\s*,/g, ', ');
+            searchInput.value = next.trim().replace(/\s*,\s*$/, '');
             autocompleteResults.classList.remove('active');
             searchInput.focus();
         }
@@ -858,14 +902,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (e.key === 'Enter' && activeItem) {
             e.preventDefault();
             const ingredient = activeItem.dataset.ingredient;
-            const currentValue = searchInput.value.trim();
-            
-            if (currentValue) {
-                searchInput.value = `${currentValue}, ${ingredient}`;
-            } else {
-                searchInput.value = ingredient;
-            }
-            
+            const currentValue = searchInput.value;
+            const parts = currentValue.split(',');
+            parts[parts.length - 1] = ` ${ingredient}`;
+            const next = parts.join(',').replace(/^\s*,\s*/,'').replace(/,\s*,/g, ', ');
+            searchInput.value = next.trim().replace(/\s*,\s*$/, '');
             autocompleteResults.classList.remove('active');
         } else if (e.key === 'Escape') {
             autocompleteResults.classList.remove('active');
