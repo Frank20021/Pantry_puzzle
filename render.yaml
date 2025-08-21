@@ -1,0 +1,10 @@
+services:
+  - type: static_site
+    name: FRANK
+    env: static
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
