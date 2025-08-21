@@ -1,6 +1,9 @@
-staticSites:
-  - name: FRANK
-    publishPath: .
+specVersion: '1'
+services:
+  - type: web
+    name: FRANK
+    env: static
+    staticPublishPath: .
     pullRequestPreviewsEnabled: true
     headers:
       - path: /*
