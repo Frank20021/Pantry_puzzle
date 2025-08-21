@@ -1,7 +1,6 @@
 services:
-  - type: static_site
+  - type: static
     name: FRANK
-    env: static
     staticPublishPath: .
     pullRequestPreviewsEnabled: true
     headers:
